@@ -1,21 +1,22 @@
 from time import sleep
 from random import shuffle
-from action import (must_be_number,
-                    win, get_last_life,
-                    list_of_numbers,
-                    yes_no)
+import action
 
 
-
+def get_game_bounds():
+    start = action.must_be_number(input("Which number do you want to start at ? "))
+    stop = action.must_be_number(input("What is your stop number: "))
+    if start > stop:
+        start, stop = stop, start
+    return start, stop
 
 
 def number_guessing_game(name):
 
     print(f"Hey {name} let me read your mind. 🔮")
     print("I give you a range of numbers and I will try to guess your number")
-    start = must_be_number(input("Which number do you want to start at ? "))
-    stop = must_be_number(input("What is your stop number: "))
-    numbers, instruct = list_of_numbers(stop, start)
+    start, stop = get_game_bounds() 
+    numbers, instruct = action.list_of_numbers(stop, start)
     shuffle(numbers)
     sleep(1.4)
     print("😤 YOU ARE NOT ALLOWED TO CHANGE A NUMBER!!! 😤")
@@ -47,14 +48,13 @@ def number_guessing_game(name):
         if not instruct:
             if len(numbers) == 1:
                 print(f"This is your number {numbers[0]}")
-                print(win())
+                print(action.win())
                 print("Do you want to go again!")
-            hum_play = yes_no(input("(Y/n): "))
+            hum_play = action.yes_no(input("(Y/n): "))
             if hum_play.lower() == "y":
                 count = 0
-                start = must_be_number(input("Which number do you want to start at  ? "))
-                stop = must_be_number(input("What is your stop number: "))
-                numbers, instruct = list_of_numbers(start, stop)
+                start, stop = get_game_bounds() 
+                numbers, instruct = action.list_of_numbers(start, stop)
                 shuffle(numbers)
                 print(f"Choose a number:\n{numbers}")
                 numbers = sorted(numbers)
@@ -71,16 +71,15 @@ def number_guessing_game(name):
             else:
                 computer_guess = (len(numbers)-1)//2
                 print(f"Is this your number {numbers[computer_guess]}")
-                hum_validate_ans = yes_no(input("Input (Y/n): "))
+                hum_validate_ans = action.yes_no(input("Input (Y/n): "))
         if hum_validate_ans.lower() == "y":
-            print(win())
+            print(action.win())
             print("Do you want to go again!")
             hum_play = input("(Y/n): ")
             if hum_play.lower() == "y":
                 count = 0
-                start = must_be_number(input("Which number do you want to start at  ? "))
-                stop = must_be_number(input("What is your stop number: "))
-                numbers, instruct = list_of_numbers(stop, start)
+                start, stop = get_game_bounds()
+                numbers, instruct = action.list_of_numbers(stop, start)
                 shuffle(numbers)
                 print(f"Choose a number:\n{numbers}")
                 numbers = sorted(numbers)
@@ -95,7 +94,7 @@ def number_guessing_game(name):
             print("Was it high or Low")
             hum_clue = input("High or Low: ")
             if count == 6:
-                print(get_last_life())
+                print(action.get_last_life())
             if numbers.index(numbers[computer_guess]) == 0:
                 numbers = numbers[computer_guess + 1:]
             elif hum_clue.lower() == "high":
